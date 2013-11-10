@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block title %} Login {% endblock %}
+{% block body %}
+	<div data-role="content">
+  <form class="pure-form pure-form-aligned" action="{{ url_for('login') }}" method=post>
+	<fieldset>
+		<div>
+		      <label for="username">Username</label>
+		      <input id="username" type=text name=username>
+		</div>
+
+		<div>
+		      <label for="password">Password</label>
+		      <input id="password" type=password name=password>
+		</div>
+
+		<div>
+		      <input class="pure-button pure-button-primary" type=submit value=Login>
+		</div>
+	</fieldset>
+  </form>
+</div>
+
+{% endblock %}

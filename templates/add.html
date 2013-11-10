@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block title %} Add Title {% endblock %}
+{% block body %}
+<div data-role="content">
+	  <form action="{{ url_for("add") }}" method=post>
+	<fieldset>
+		<div>
+		      <label for="title">Title</label>
+		      <input id="title" type=text name=title>
+		</div>
+
+		<div>
+		      <label for="cover">Cover Image URL</label>
+		      <input id="cover" type=text name=cover>
+		</div>
+
+		<div>
+		      <label for="content">Content</label>
+		      <textarea id="content" name="content"></textarea>
+		</div>
+
+		<div>
+		      <input type=submit value=Submit>
+		</div>
+	</fieldset>
+  </form>
+</div>
+{% endblock %}

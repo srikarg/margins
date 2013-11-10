@@ -1,0 +1,120 @@
+{% extends "layout.html" %}
+{% block title %} {{book.title}} {% endblock %}
+{% block menu_btns %}
+<style>
+.underline { text-decoration: underline; }
+#dictionary {
+			width: 400px;
+			text-align: center;
+		}
+
+		#dictionary .header {
+			padding: 15px;
+		}
+</style>
+<form>
+    <fieldset class="ui-btn-right" data-role="controlgroup" data-type="horizontal">
+        <input data-mini="true" name="checkbox-h-2a" id="checkbox-h-2a" onclick="toggle2(false);" type="checkbox">
+        <label for="checkbox-h-2a">Dict.</label>
+        <input data-mini="true" checked name="checkbox-h-2b" id="checkbox-h-2b" onclick="toggle(false);" type="checkbox">
+        <label for="checkbox-h-2b">Margins</label>
+    </fieldset>
+</form>
+
+<!--
+    <div class="ui-btn-right" data-role="controlgroup" data-type="horizontal">
+	<a onclick="toggle2();" data-role="button" data-icon="bars">Dict.</a>
+	<a id="margins" onclick="$('span.hasComments').toggleClass('underline'); toggle('.nostyle');" data-role="button" data-icon="star" data-theme="b">Margins</a>
+    </div>
+-->
+<!-- </script> -->
+{% endblock %}
+{% block body %}
+<div data-role="content">
+<div class="content2">
+<div style="font-size: 18px; margin: 20px; line-height: 1.5em;">
+{% autoescape false %}
+{{ book.content | by_sentence | reverse }}
+{% endautoescape %}
+</div>
+</div>
+<div data-role="popup" id="dictionary" class="ui-corner-all">
+			<div class="header" data-role="header" data-theme="a" class="ui-corner-top">
+				<strong>Definition for <span class="word"></span></strong>
+			</div>
+			<div data-role="content" class="ui-corner-bottom ui-content">
+				<p class="definition"></p>
+			</div>
+		</div>
+<p>
+<a href="/read/{{id}}" {% if finished %} class="ui-disabled" {% endif %} data-role="button" data-mini="true" data-inline="true" data-icon="check" data-theme="b">Done Reading</a>
+</p>
+
+<script>
+
+function getSelectionText() {
+	var text = '';
+	if (window.getSelection) {
+		text = window.getSelection().toString();
+	} else if (document.selection && document.selection.type != "Control") {
+		text = document.selection.createRange().text;
+	}
+	return text;
+}
+var b = true;
+var a = true;	
+
+function toggle(x){
+	if (a === true) {
+		if (b === false){
+			$("#checkbox-h-2a").attr("checked", false);
+			$(".ui-content, .word").unbind('click');	
+		}
+		$(".content2").on("click", ".nostyle", function(e){
+			e.preventDefault();
+			$.mobile.changePage("/comments/"+ {{id}} +"/"+$(this).attr("name"));
+		})
+		$(".hasComments").addClass("underline");
+	} else {
+		$(".hasComments").removeClass("underline")
+		$(".content2").unbind("click");
+	}
+	a = !a;
+}
+
+toggle(false);
+
+function toggle2(x) {
+	if (b === true) {
+		if (a === false){
+			$("#checkbox-h-2b").attr("checked", false);
+			$(".hasComments").removeClass("underline");
+			$(".content2").unbind("click");
+		}
+		var dictionary = $('#dictionary');
+		$(".ui-content").on('click', ".word", function() {
+			var query = $(this).text();
+			$.getJSON('http://glosbe.com/gapi/translate?from=eng&dest=eng&format=json&phrase=' + encodeURIComponent(query) + '&pretty=true&pageSize=10&callback=?', function(data) {
+				console.log(data.tuc + ' ' + data.tuc[0]);
+				if (data.tuc[0] !== null && data.tuc[0] !== undefined) {
+					dictionary.find('.header').html('<strong>Definition for <span class="word"></span></strong>');
+					dictionary.find('.word').text(query);
+					dictionary.find('.definition').text(data.tuc[0].meanings[0].text);
+				}
+				else {
+					dictionary.find('.header').text('Error!');
+					dictionary.find('.definition').text('Sorry, but the specified term was not found in the dictionary!');
+				}
+				dictionary.trigger('updatelayout');
+				dictionary.popup('open');
+			});
+		});
+	}
+	else {
+		$(".ui-content, .word").unbind('click');	
+	}
+	b = !b;
+}
+</script>
+{% endblock %}
+</div>

@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block title %} Comments {% endblock %}
+{% block body %}
+<div data-role="content">
+	<ul class="comments" data-role="listview">
+		{% for comment in data[0] %}
+		<li>{{ comment[3] }}: {{ comment[2] }}</li>
+		{% endfor %}
+	</ul>
+	<p>
+	<textarea name="body" id="comment-body" placeholder="Enter text here."></textarea>
+	<a id="add" data-theme="b" data-role="button">Submit</a>
+	</p>
+</div>
+<script>
+	$("#add").click(function(){
+		var comment = window.btoa($('#comment-body').val().trim());
+		$.ajax({
+			type: 'POST',
+			url: '/new_comment/{{book}}/{{section}}/{{uid}}/' + comment,
+			success: function() {
+				location.reload();
+			}
+		});
+	});
+</script>
+{% endblock %}

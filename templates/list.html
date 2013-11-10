@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block title %} My Shelf {% endblock %}
+{% block body %}
+<div data-role="content">
+{% for book in books %}
+<p style="text-align: center;">
+	<a href="/book/{{book.id}}">
+	<img width="220px" height="332px" src="{{book.image}}" />
+	</a>
+</p>
+{% endfor %}
+<p style="text-align: center;">
+	<a href="/add" data-role="button"data-icon="plus">Add New Title</a>
+</p>
+</div>
+{% endblock %}

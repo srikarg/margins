@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block title %} Search {% endblock %}
+{% block body %}
+<div data-role="content">
+<ul data-role="listview" data-filter="true" data-filter-placeholder="Search users..." data-inset="true">
+{% for user in users %}
+<li><a href="/user/{{user.id}}">{{user.name}}</a></li>
+{% endfor %}
+</ul>
+</div>
+{% endblock %}

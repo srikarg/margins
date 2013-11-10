@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block title %} Register {% endblock %}
+{% block body %}
+	<div data-role="content">
+	  <form action="{{ url_for('register') }}" method=post>
+	<fieldset>
+		<div>
+		      <label for="username">Username</label>
+		      <input id="username" type=text name=username>
+		</div>
+
+		<div>
+		      <label for="password">Password</label>
+		      <input id="password" type=password name=password>
+		</div>
+
+		<div>
+		      <input type=submit value=Register>
+		</div>
+	</fieldset>
+  </form>
+</div>
+
+{% endblock %}

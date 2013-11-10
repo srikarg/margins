@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block title %} {{uname}}'s Reading List  {% endblock %}
+{% block body %}
+<div data-role="content">
+{% if books | length == 0 %}
+	<p style="text-align: center">This user hasn't read any books ☹</p>
+{% else %}
+	{% for book in books %}
+	<p style="text-align: center;">
+		<a href="/book/{{book.id}}">
+		<img src="/static/image/{{book.id}}.jpg" />
+		</a>
+	</p>
+	{% endfor %}
+{% endif %}
+</div>
+{% endblock %}
