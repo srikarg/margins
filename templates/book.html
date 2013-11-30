@@ -93,17 +93,15 @@ function toggle2(x) {
 		}
 		var dictionary = $('#dictionary');
 		$(".ui-content").on('click', ".word", function() {
-			var query = $(this).text();
-			$.getJSON('http://glosbe.com/gapi/translate?from=eng&dest=eng&format=json&phrase=' + encodeURIComponent(query) + '&pretty=true&pageSize=10&callback=?', function(data) {
-				console.log(data.tuc + ' ' + data.tuc[0]);
-				if (data.tuc[0] !== null && data.tuc[0] !== undefined) {
-					dictionary.find('.header').html('<strong>Definition for <span class="word"></span></strong>');
-					dictionary.find('.word').text(query);
-					dictionary.find('.definition').text(data.tuc[0].meanings[0].text);
+			var query = $(this).text().trim();
+			$.getJSON('http://api.duckduckgo.com/?q=define+' + encodeURIComponent(query) + '&format=json', function(data) {
+				if (typeof data.Definition !== 'undefined' && data.Definition !== '') {
+					dictionary.find('.header').html('<strong>Definition for <span class="word">' + query + '</span></strong>');
+					dictionary.find('.definition').text(data.Definition);
 				}
 				else {
 					dictionary.find('.header').text('Error!');
-					dictionary.find('.definition').text('Sorry, but the specified term was not found in the dictionary!');
+					dictionary.find('.definition').text('Sorry, but the definition for ' + query + ' was not found!');
 				}
 				dictionary.trigger('updatelayout');
 				dictionary.popup('open');
